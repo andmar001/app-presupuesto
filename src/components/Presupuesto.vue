@@ -1,5 +1,6 @@
 <script setup>
    import { ref } from 'vue'
+   
    import Alerta from './Alerta.vue'
    
    const presupuesto = ref(0)
@@ -14,6 +15,7 @@
          setTimeout(() => {
             error.value = ''
          }, 3000);
+         return
       }
 
       emit('definir-presupuesto',presupuesto.value)
@@ -41,7 +43,7 @@
                placeholder="Añade tu presupuesto"
                type="number"
                min="0"
-               v-model.number="prosupuesto"
+               v-model.number="presupuesto"
          />
       </div>
 
