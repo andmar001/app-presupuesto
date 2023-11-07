@@ -37,6 +37,15 @@
     deep:true
   })
 
+  watch(modal,()=>{
+    if(!modal.mostrar){
+      //Reiniciar el gasto
+      reiniciarGastoState()
+    }
+  },{
+    deep:true
+  })
+
   const definirPresupuesto = (cantidad) => {
     presupuesto.value = cantidad
     disponible.value = cantidad
@@ -62,15 +71,24 @@
       id:generarId()
     })
     ocultarModal()
+    reiniciarGastoState()
+  }
 
-    //Reiniciar el gasto
-    Object.assign(gasto,{
+  //Reiniciar el gasto
+  const reiniciarGastoState = () => {
+    Object.assign(gasto, {
       nombre: '',
       cantidad: '',
       categoria: '',
-      id:null,
+      id: null,
       fecha: Date.now()
     })
+  }
+
+  const seleccionarGasto = (id) =>{
+    const gastoEditar = gastos.value.filter(gasto => gasto.id === id)[0]
+    Object.assign(gasto,gastoEditar)
+    mostrarModal()
   }
 
 </script>
@@ -108,6 +126,7 @@
           v-for="gasto in gastos"
           :key="gasto.id"
           :gasto="gasto"
+          @seleccionar-gasto="seleccionarGasto"
         />
         
       </div>
