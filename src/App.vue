@@ -31,6 +31,8 @@
   watch(()=>{
     const totalGastado = gastos.value.reduce((total,gasto) => total + gasto.cantidad,0)
     gastado.value = totalGastado
+    // calcular el disponible
+    disponible.value = presupuesto.value - totalGastado
   },{
     deep:true
   })
@@ -123,6 +125,7 @@
           @ocultar-modal="ocultarModal"
           @guardar-gasto="guardarGasto"
           :modal="modal"
+          :disponible="disponible"
           v-model:nombre="gasto.nombre"
           v-model:cantidad="gasto.cantidad"
           v-model:categoria="gasto.categoria"
