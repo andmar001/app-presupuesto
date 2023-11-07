@@ -2,11 +2,23 @@
    import { ref } from 'vue'
 import cerrarModal from '../assets/img/cerrar.svg'
 
-   const emit = defineEmits(['ocultar-modal'])
+   const emit = defineEmits(['ocultar-modal','update:nombre','update:cantidad','update:categoria'])
 
    const props = defineProps({
       modal:{
          type: Object,
+         required: true
+      },
+      nombre: {
+         type: String,
+         required: true
+      },
+      cantidad: {
+         type: [String,Number],
+         required: true
+      },
+      categoria: {
+         type: String,
          required: true
       }
    })
@@ -36,6 +48,8 @@ import cerrarModal from '../assets/img/cerrar.svg'
                   type="text"
                   id="nombre"
                   placeholder="Añade el nombre del gasto"
+                  :value="nombre"
+                  @input="$event => emit('update:nombre',$event.target.value)"
                />
             </div>
             <div class="campo">
@@ -44,12 +58,16 @@ import cerrarModal from '../assets/img/cerrar.svg'
                   type="text"
                   id="cantidad"
                   placeholder="Añade la cantidad del gasto, ej. 300"
+                  :value="cantidad"
+                  @input="$event => emit('update:cantidad',+$event.target.value)"
                />
             </div>
             <div class="campo">
                <label for="categoria">Categoria:</label>
                <select 
                   id="categoria"
+                  :value="categoria"
+                  @input="$event => emit('update:categoria',$event.target.value)"
                >
                   <option value="">-- Seleccione --</option>
                   <option value="ahorro">Ahorro</option>
