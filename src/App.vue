@@ -66,7 +66,9 @@
 </script>
 
 <template>
-  <div>
+  <div
+    :class="{fijar:modal.mostrar}"
+  >
     <header>
       <h1>Planificador de Gastos</h1>
 
@@ -150,6 +152,11 @@
   }
   h2{
     font-size: 3rem;
+  }
+  --clase para el modal que se corta
+  .fijar{
+    overflow:hidden;
+    height: 100vh;
   }
   header{
     background-color: var(--azul);
