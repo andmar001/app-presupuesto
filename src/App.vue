@@ -66,10 +66,19 @@
   }
 
   const guardarGasto = () =>{
-    gastos.value.push({
-      ...gasto,
-      id:generarId()
-    })
+    //validar si estamos editando o creando
+    //editando
+    if (gasto.id){
+      const { id } = gasto
+      const i = gastos.value.findIndex(gasto => gasto.id === id)
+      gastos.value[i] = {...gasto}
+    }else{
+      //creando nuevo
+      gastos.value.push({
+        ...gasto,
+        id:generarId()
+      })
+    }
     ocultarModal()
     reiniciarGastoState()
   }
@@ -187,7 +196,7 @@
   --clase para el modal que se corta
   .fijar{
     overflow:hidden;
-    height: 100vh;
+    height: 400vh;
   }
   header{
     background-color: var(--azul);
