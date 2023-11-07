@@ -1,6 +1,9 @@
 <script setup>
-   import { ref } from 'vue'
-import cerrarModal from '../assets/img/cerrar.svg'
+   import { ref } from 'vue';
+   import Alerta from './Alerta.vue';
+   import cerrarModal from '../assets/img/cerrar.svg'
+
+   const error = ref('')
 
    const emit = defineEmits(['ocultar-modal','update:nombre','update:cantidad','update:categoria'])
 
@@ -22,6 +25,27 @@ import cerrarModal from '../assets/img/cerrar.svg'
          required: true
       }
    })
+   const agregarGasto = () => {
+      //validar campos que no esten vacios
+      const { nombre, cantidad, categoria } = props
+      if([nombre,cantidad,categoria].includes('')){
+         error.value = 'Todos los campos son obligatorios'
+         setTimeout(() => {
+            error.value = ''
+         }, 3000);
+         return
+      }
+      //validar cantidad
+      if(cantidad <= 0 || isNaN(cantidad)){
+         setTimeout(() => {
+            error.value = ''
+         }, 3000);
+         error.value = 'Cantidad no valida'
+         return
+      }
+
+      console.log('agregando gasto')
+   }
 </script>
 
 <template>
@@ -39,8 +63,15 @@ import cerrarModal from '../assets/img/cerrar.svg'
       >
          <form
             class="nuevo-gasto"
+            @submit.prevent="agregarGasto"
          >
             <legend>Añadir Gasto</legend>
+
+            <Alerta
+               v-if="error"
+            >
+               {{ error  }}
+            </Alerta>
             
             <div class="campo">
                <label for="nombre">Nombre Gasto: </label>
