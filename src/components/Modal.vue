@@ -1,5 +1,5 @@
 <script setup>
-   import { ref } from 'vue';
+   import { ref, computed } from 'vue';
    import Alerta from './Alerta.vue';
    import cerrarModal from '../assets/img/cerrar.svg'
 
@@ -27,11 +27,23 @@
       disponible: {
          type: Number,
          required: true
+      },
+      id : {
+         type: [String,null],
+         required: false
       }
    })
+   
+   const editando = computed(() => {
+      return props.id
+   })
+
+   // valor de la cantidad antes de editar
+   const old = props.cantidad;
+
    const agregarGasto = () => {
       //validar campos que no esten vacios
-      const { nombre, cantidad, categoria, disponible } = props
+      const { nombre, cantidad, categoria, disponible, id } = props
       if([nombre,cantidad,categoria].includes('')){
          error.value = 'Todos los campos son obligatorios'
          setTimeout(() => {
@@ -48,12 +60,23 @@
          return
       }
       //validar que el usuario no gaste mas al disponible
-      if(cantidad > disponible){
-         error.value = 'Has excedido el presupuesto disponible'
-         setTimeout(() => {
-            error.value = ''
-         }, 3000);
-         return
+      if(id){
+         //Tomar en cuenta el gasto que ya realizado
+         if(cantidad > old + disponible){
+            error.value = 'Has excedido el presupuesto disponible'
+            setTimeout(() => {
+               error.value = ''
+            }, 3000);
+            return
+         }
+      }else{
+         if(cantidad > disponible){
+            error.value = 'Has excedido el presupuesto disponible'
+            setTimeout(() => {
+               error.value = ''
+            }, 3000);
+            return
+         }
       }
 
       emit('guardar-gasto')
@@ -77,7 +100,9 @@
             class="nuevo-gasto"
             @submit.prevent="agregarGasto"
          >
-            <legend>Añadir Gasto</legend>
+            <legend>
+               {{ editando ? 'Editar Gasto' : 'Añadir Gasto' }}
+            </legend>
 
             <Alerta
                v-if="error"
@@ -126,7 +151,7 @@
             <input
                type="submit"
                class="boton"
-               value="Añadir Gasto"
+               :value="[editando ? 'Guardar cambios' : 'Añadir Gasto']"
             />
          </form>
       </div>
