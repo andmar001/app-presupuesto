@@ -101,7 +101,7 @@
       font-weight: 400;
    }
    .cantidad{
-      font-size: 2.3rem;
+      font-size: 3rem;
       font-weight: 900;
       margin: 0;
    }

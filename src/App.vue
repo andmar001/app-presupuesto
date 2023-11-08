@@ -134,9 +134,9 @@
   const gastosFiltrados = computed(()=>{
     if(filtro.value){
       return gastos.value.filter(gasto => gasto.categoria === filtro.value)
-    }else{
-      return gastos.value;
     }
+    return gastos.value;
+    
   })
 
   const resetApp = () =>{
@@ -150,12 +150,12 @@
 
 <template>
   <div
-    :class="{fijar:modal.mostrar}"
+    :class="{fijar: modal.mostrar}"
   >
     <header>
       <h1>Planificador de Gastos</h1>
 
-      <div class="contenedor contenedor-header sombra">
+      <div class="contenedor-header contenedor sombra">
         
         <Presupuesto
             v-if="presupuesto === 0"
@@ -226,16 +226,16 @@
     --gris-oscuro: #64748b;
     --negro:#000
   }
-  html{
+  html {
     font-size: 62.5%;
     box-sizing: border-box;
   }
   *,
   *:before,
-  *:after{
+  *:after {
     box-sizing: inherit;
   }
-  body{
+  body {
     font-size: 1.6rem;
     font-family: "Lato", sans-serif;
     background-color: var(--gris-claro);
@@ -246,10 +246,10 @@
   h2{
     font-size: 3rem;
   }
-  --clase para el modal que se corta
-  .fijar{
-    overflow:hidden;
-    height: 400vh;
+  /* clase para fijar el modal*/
+  .fijar {
+    overflow: hidden;
+    height: 100vh;
   }
   header{
     background-color: var(--azul);

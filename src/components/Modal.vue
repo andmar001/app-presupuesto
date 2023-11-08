@@ -89,7 +89,7 @@
          <img
             :src="cerrarModal"
             alt="Cerrar Modal"
-            @click="emit('ocultar-modal')"
+            @click="$emit('ocultar-modal')"
          />
       </div>
       <div 
@@ -117,7 +117,7 @@
                   id="nombre"
                   placeholder="Añade el nombre del gasto"
                   :value="nombre"
-                  @input="$event => emit('update:nombre',$event.target.value)"
+                  @input="$emit('update:nombre', $event.target.value)"
                />
             </div>
             <div class="campo">
@@ -127,7 +127,7 @@
                   id="cantidad"
                   placeholder="Añade la cantidad del gasto, ej. 300"
                   :value="cantidad"
-                  @input="$event => emit('update:cantidad',+$event.target.value)"
+                  @input="$emit('update:cantidad', +$event.target.value)"
                />
             </div>
             <div class="campo">
@@ -135,7 +135,7 @@
                <select 
                   id="categoria"
                   :value="categoria"
-                  @input="$event => emit('update:categoria',$event.target.value)"
+                  @input="$emit('update:categoria', $event.target.value)"
                >
                   <option value="">-- Seleccione --</option>
                   <option value="ahorro">Ahorro</option>
@@ -153,17 +153,17 @@
                class="boton"
                :value="[editando ? 'Guardar cambios' : 'Añadir Gasto']"
             />
-
-            <button
-               type="button"
-               class="btn-eliminar"
-               v-if="editando"
-               @click="$event => emit('eliminar-gasto')"
-            >
-               Eliminar Gasto
-            </button>
-
          </form>
+
+         <button
+            type="button"
+            class="btn-eliminar"
+            v-if="editando"
+            @click="$emit('eliminar-gasto')"
+         >
+            Eliminar Gasto
+         </button>
+
       </div>
    </div>
 </template>
