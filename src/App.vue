@@ -55,12 +55,6 @@
     localStorage.setItem('presupuesto',presupuesto.value) 
   })
 
-  watch(gastos,()=>{
-    guardarGastosLocalStorage()
-  },{
-    deep:true
-  })
-
   onMounted(()=>{
     //obtener el presupuesto del localStorage
     const presupuestoLocalStorage = localStorage.getItem('presupuesto')
@@ -145,6 +139,13 @@
     }
   })
 
+  const resetApp = () =>{
+    if(confirm('¿Deseas reiniciar el presupuesto?')){
+      gastos.value = []  
+      presupuesto.value = 0
+    }
+  }
+
 </script>
 
 <template>
@@ -165,6 +166,7 @@
             :presupuesto="presupuesto"
             :disponible="disponible"
             :gastado="gastado"
+            @reset-app="resetApp"
         />
 
       </div>

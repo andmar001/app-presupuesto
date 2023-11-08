@@ -18,6 +18,8 @@
       }
    })
 
+   const emit = defineEmits(['reset-app'])
+
 </script>
 
 <template>
@@ -30,6 +32,8 @@
       <div class="contenedor-presupuesto">
          <button
                class="reset-app"
+               type="button"
+               @click="$emit('reset-app')"
          >
             Resetear App
          </button>
