@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, reactive, watch } from 'vue'
+  import { ref, reactive, watch, computed, onMounted } from 'vue'
   
   import Presupuesto from './components/Presupuesto.vue'
   import ControlPresupuesto from './components/ControlPresupuesto.vue'
@@ -30,11 +30,14 @@
   })
   const gastos = ref([])
 
-  watch(()=>{
+  watch(gastos,()=>{
     const totalGastado = gastos.value.reduce((total,gasto) => total + gasto.cantidad,0)
     gastado.value = totalGastado
     // calcular el disponible
     disponible.value = presupuesto.value - totalGastado
+
+    //guardar en localStorage
+    localStorage.setItem('gastos',JSON.stringify(gastos.value))
   },{
     deep:true
   })
@@ -48,6 +51,31 @@
     deep:true
   })
 
+  watch(presupuesto,()=>{
+    localStorage.setItem('presupuesto',presupuesto.value) 
+  })
+
+  watch(gastos,()=>{
+    guardarGastosLocalStorage()
+  },{
+    deep:true
+  })
+
+  onMounted(()=>{
+    //obtener el presupuesto del localStorage
+    const presupuestoLocalStorage = localStorage.getItem('presupuesto')
+    //si hay asignarlos al arreglo de gastos
+    if(presupuestoLocalStorage){
+      presupuesto.value = Number(presupuestoLocalStorage)
+      disponible.value = Number(presupuestoLocalStorage)
+    }
+    //obtener los gastos del localStorage
+    const gastosLocalStorage = JSON.parse(localStorage.getItem('gastos'))
+    if(gastosLocalStorage){
+      gastos.value = gastosLocalStorage
+    }
+  })
+ 
   const definirPresupuesto = (cantidad) => {
     presupuesto.value = cantidad
     disponible.value = cantidad
@@ -109,6 +137,14 @@
     }
   }
 
+  const gastosFiltrados = computed(()=>{
+    if(filtro.value){
+      return gastos.value.filter(gasto => gasto.categoria === filtro.value)
+    }else{
+      return gastos.value;
+    }
+  })
+
 </script>
 
 <template>
@@ -142,10 +178,10 @@
       />
 
       <div class="listado-gastos contenedor">
-        <h2>{{ gastos.length > 0 ? 'Gastos':'No hay gastos'}}</h2>
+        <h2>{{ gastosFiltrados.length > 0 ? 'Gastos':'No hay gastos'}}</h2>
 
         <Gasto
-          v-for="gasto in gastos"
+          v-for="gasto in gastosFiltrados"
           :key="gasto.id"
           :gasto="gasto"
           @seleccionar-gasto="seleccionarGasto"
